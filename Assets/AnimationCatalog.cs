@@ -25,7 +25,7 @@ namespace NamPhuThuy.AnimateWithScripts
         SEGMENT_REWARD_PROGRESS = 11,
     }
 
-    [CreateAssetMenu(fileName = "VFXCatalog", menuName = "VFX/VFX Catalog")]
+    [CreateAssetMenu(fileName = "AnimationCatalog", menuName = "NamPhuThuy_AnimateWithScripts/Animation Catalog")]
     public class AnimationCatalog : ScriptableObject
     {
         public List<Entry> entries = new();
