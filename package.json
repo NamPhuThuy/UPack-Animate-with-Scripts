@@ -2,33 +2,31 @@
     "name": "com.namphuthuy.animatewithscripts",
     "version": "1.0.0",
     "displayName": "Animate With Scripts",
-    "description": "Bunch of Scripts can be used to animate things",
-    "unity": "6000.0",
-    "categories": 
-    [
+    "description": "Bunch of Scripts can be used to animate things in Unity",
+    "unity": "2021.3",
+    "categories": [
         "Tools",
         "Visual Effects",
         "Animation"
     ],
-    "keywords": 
-    [
+    "keywords": [
         "unity",
         "vfx",
         "particles",
+        "animation",
+        "tween",
         "tools"
     ],
-    "dependencies": 
-    {
+    "dependencies": {
         "com.unity.textmeshpro": "3.0.6",
         "com.unity.ugui": "1.0.0"
     },
-    "author": 
-    {
+    "author": {
         "name": "NamPhuThuy",
         "email": "ttnam957@gmail.com",
         "url": "https://github.com/NamPhuThuy"
     },
     "license": "MIT",
-    "changelogUrl": "https://github.com/NamPhuThuy/UPack-Animate-with-Scripts/blob/main/changelog.md",
-    "documentationUrl": "https://github.com/NamPhuThuy/UPack-Animate-with-Scripts"
+    "changelogUrl": "https://github.com/NamPhuThuy/UP-AnimateWithScripts/blob/main/changelog.md",
+    "documentationUrl": "https://github.com/NamPhuThuy/UP-AnimateWithScripts#readme"
 }

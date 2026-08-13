@@ -5,10 +5,8 @@
         "UnityEngine.UI",
         "Unity.TextMeshPro",
         "NamPhuThuy.AnimateWithScripts.DOTween",
-        "NamPhuThuy.Common",
-        "NamPhuThuy.AnimateWithScripts.SpineCSharp",
-        "NamPhuThuy.AnimateWithScripts.SpineUnity",
-        "NamPhuThuy.AnimateWithScripts.PrimeTween"
+        "NamPhuThuy.AnimateWithScripts.PrimeTween",
+        "NamPhuThuy.AnimateWithScripts.PrimeTween.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -19,4 +17,4 @@
     "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false
-}
+}

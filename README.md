@@ -70,19 +70,26 @@ Applies continuous rotation, scaling, or clock-like periodic motions to simple 2
 
 
 
-# INSTALLATION
+# Installation
 
-## UNITY PACKAGE MANAGER
-- Step 1: From Unity Editor -> Window -> Package Management -> Package Manager
-- Step 2: Press the plus (+) icon in the top-left of Window
-- Step 3: Select **Install package from git URL** -> paste the git-URL (https://github.com/NamPhuThuy/UP-AnimateWithScripts.git) and choose Install
+### Method 1: Unity Package Manager (Git URL)
+1. In Unity Editor, go to **Window** -> **Package Manager**.
+2. Click the **+** (plus) icon in the top-left corner.
+3. Select **Add package from git URL...**.
+4. Enter the repository URL:
+   - **Latest**: `https://github.com/NamPhuThuy/UP-AnimateWithScripts.git`
+   - **Specific Version (v1.0.0)**: `https://github.com/NamPhuThuy/UP-AnimateWithScripts.git#1.0.0`
+5. Click **Add**.
 
-
-## THROUGH GIT
-- Step 1: Copy the git-URL (https://github.com/NamPhuThuy/UP-AnimateWithScripts.git)
-- Step 2: Open Git CLI and type: git install https://github.com/NamPhuThuy/UP-AnimateWithScripts.git
-- Step 3: Enter and wait
-- Step 4: Make sure you have install the package TextMeshProUGUI in the Unity Project
+### Method 2: Via `manifest.json`
+Add the package to your Unity project's `Packages/manifest.json` file under `"dependencies"`:
+```json
+{
+  "dependencies": {
+    "com.namphuthuy.animatewithscripts": "https://github.com/NamPhuThuy/UP-AnimateWithScripts.git#1.0.0"
+  }
+}
+```
 
 
 ## Scripts Documentation
