@@ -1,5 +1,5 @@
 /*
-Github: https://github.com/NamPhuThuy
+Github: https://github.com/NamPhuThuy/UP-AnimateWithScripts
 */
 
 

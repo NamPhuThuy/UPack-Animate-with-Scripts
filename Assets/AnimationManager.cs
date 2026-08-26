@@ -1,5 +1,5 @@
 /*
-Github: https://github.com/NamPhuThuy
+Github: https://github.com/NamPhuThuy/UP-AnimateWithScripts
 */
 
 using System.Collections.Generic;
@@ -17,6 +17,8 @@ namespace NamPhuThuy.AnimateWithScripts
         // type -> pooled objects
         private readonly Dictionary<AnimationType, Queue<AnimationBase>> _pool = new();
         private readonly Dictionary<AnimationBase, AnimationType> _reverse = new();
+        // type -> active playing objects (in order of activation, oldest first)
+        private readonly Dictionary<AnimationType, List<AnimationBase>> _active = new();
         
         #region MonoBehaviour Callbacks
 
@@ -59,8 +61,20 @@ namespace NamPhuThuy.AnimateWithScripts
 
         private AnimationBase Get(AnimationType type)
         {
-            if (!_pool.TryGetValue(type, out var q)) { q = new Queue<AnimationBase>(); _pool[type] = q; }
-            if (q.Count > 0) return q.Dequeue();
+            if (!_pool.TryGetValue(type, out var poolQueue))
+            {
+                poolQueue = new Queue<AnimationBase>();
+                _pool[type] = poolQueue;
+            }
+
+            if (!_active.TryGetValue(type, out var activeList))
+            {
+                activeList = new List<AnimationBase>();
+                _active[type] = activeList;
+            }
+
+            // Clean up any destroyed references
+            activeList.RemoveAll(item => item == null);
 
             var entry = animationCatalog.GetEntry(type);
             if (entry == null || !entry.prefab)
@@ -69,9 +83,33 @@ namespace NamPhuThuy.AnimateWithScripts
                 return null;
             }
 
-            var inst = Instantiate(entry.prefab, transform);
-            _reverse[inst] = type;
-            return inst;
+            // 1. If we have an idle instance in the pool, use it
+            if (poolQueue.Count > 0)
+            {
+                var pooledInst = poolQueue.Dequeue();
+                activeList.Add(pooledInst);
+                return pooledInst;
+            }
+
+            int limit = entry.limit > 0 ? entry.limit : 5;
+
+            // 2. If active limit reached, recycle and reuse the earliest active animation
+            if (activeList.Count >= limit && activeList.Count > 0)
+            {
+                var earliest = activeList[0];
+                activeList.RemoveAt(0);
+                earliest.EndFast();
+
+                AnimationBase inst = (poolQueue.Count > 0) ? poolQueue.Dequeue() : earliest;
+                activeList.Add(inst);
+                return inst;
+            }
+
+            // 3. Otherwise instantiate a new instance up to the limit
+            var newInst = Instantiate(entry.prefab, transform);
+            _reverse[newInst] = type;
+            activeList.Add(newInst);
+            return newInst;
         }
         
         public void Release(AnimationBase animation)
@@ -79,9 +117,24 @@ namespace NamPhuThuy.AnimateWithScripts
             if (!animation) return;
             if (!_reverse.TryGetValue(animation, out var type)) return;
 
+            if (_active.TryGetValue(type, out var activeList))
+            {
+                activeList.Remove(animation);
+            }
+
             animation.transform.SetParent(transform, false);
             animation.gameObject.SetActive(false);
-            _pool[type].Enqueue(animation);
+
+            if (!_pool.TryGetValue(type, out var poolQueue))
+            {
+                poolQueue = new Queue<AnimationBase>();
+                _pool[type] = poolQueue;
+            }
+
+            if (!poolQueue.Contains(animation))
+            {
+                poolQueue.Enqueue(animation);
+            }
         }
 
 
@@ -102,14 +155,14 @@ namespace NamPhuThuy.AnimateWithScripts
 
         #region Default Effects Calls
 
-        public void PlayBasicPopupText(string message)
+        public void PlayBasicPopupText(string message, float duration = 0f)
         {
             var args = new ToastArgs
             {
                 message = message,
                 customAnchoredPos = AnimationConst.UPPER_ANCHORED_POS,
                 textColor = Color.white,
-                customDuration = 0.5f,
+                customDuration = duration,
             };
             Play(args);
         }

@@ -1,5 +1,5 @@
 /*
-Github: https://github.com/NamPhuThuy
+Github: https://github.com/NamPhuThuy/UP-AnimateWithScripts
 */
 
 using TMPro;
@@ -101,7 +101,6 @@ namespace NamPhuThuy.AnimateWithScripts
             ButtonPlayItemFly();
             ButtonStatChange();
             ButtonScreenShake();
-            ButtonParticleSystem();
             ButtonSpriteMotion();
             ButtonSpineControl();
 
@@ -240,24 +239,7 @@ namespace NamPhuThuy.AnimateWithScripts
                 AnimationManager.Ins.Play(args);
             }
         }
-        
-        private void ButtonParticleSystem()
-        {
-            if (GUILayout.Button(new GUIContent("Play Particle System", frogIcon)))
-            {
-                int randomIndex = Random.Range(0, _script.itemSprites.Length);
-                var args = new ParticleSystemArgs()
-                {
-                    particleSystem = _script.GetComponent<ParticleSystem>(),
-                    anchoredPos = Vector2.zero,
-                    fromWorld = true,
-                    customTexture = _script.itemSprites[randomIndex].texture,
-                    OnComplete = null
-                };
-
-                AnimationManager.Ins.Play(args);
-            }
-        }
+   
         
         private void ButtonSpineControl()
         {

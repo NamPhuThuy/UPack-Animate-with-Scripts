@@ -1,5 +1,5 @@
 /*
-Github: https://github.com/NamPhuThuy
+Github: https://github.com/NamPhuThuy/UP-AnimateWithScripts
 */
 
 using System;
@@ -39,6 +39,13 @@ namespace NamPhuThuy.AnimateWithScripts
         public Vector3 startPosition;
     }
     
+    public enum ToastType
+    {
+        NONE = 0,
+        FLASH = 1,
+        FLOAT = 2,
+    }
+
     [Serializable]
     public struct ToastArgs : IAnimationArgs
     {
@@ -51,11 +58,17 @@ namespace NamPhuThuy.AnimateWithScripts
         public TMP_FontAsset textFont;
         
         // Custom Values
+        public ToastType toastType;
         public float customDuration;
         public Vector3 customAnchoredPos;
         public Transform customParent;
         public float customScale;
         public bool customEnableBackImage;
+        public bool isChangeColor;
+        public bool isCustomUpDistance;
+        public float customUpDistance;
+        public bool isCustomHoldDuration;
+        public float customHoldDuration;
         
         // New percentage-based positioning
         public bool useScreenPercentage;
@@ -118,37 +131,6 @@ namespace NamPhuThuy.AnimateWithScripts
         public AnimationCurve shakeCurve;
     }
     
-    [Serializable]
-    public struct ParticleSystemArgs : IAnimationArgs
-    {
-        public AnimationType Type => AnimationType.PARTICLE_SYSTEM;
-        public Action OnComplete { get; set; }
-
-        // Must have values
-        // If true, interpret position as world space and convert to screen/UI space.
-        public bool fromWorld;
-        public ParticleSystem particleSystem;
-
-        // Used when fromWorld == true
-        public Vector3 worldPosition;
-        public Camera worldCamera; // optional; falls back to Camera.main
-
-        // Used when fromWorld == false
-        public Vector2 anchoredPos;
-        public Vector3 eulerAngle;
-
-        // Custom values
-        // Optional custom parent (e.g., a specific canvas or UI layer)
-        public Transform customParent;
-        public Material customMaterial;
-        public Color customColor;
-
-        public Texture customTexture;
-        
-        // Optional behavior
-        public bool ignoreTimeScale;
-    }
-
     [Serializable]
     public struct SpriteMotionArgs : IAnimationArgs
     {

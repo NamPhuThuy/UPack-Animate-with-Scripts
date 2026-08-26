@@ -20,10 +20,10 @@ namespace NamPhuThuy.AnimateWithScripts
         public TextMeshProUGUI MessageText => messageText;
         [SerializeField] private Image backImage;
 
-        private readonly float _inDuration = 0.25f;
+        private readonly float _inDuration = 0.35f;
         private readonly float _holdDuration = 0.8f;
         private readonly float _upDuration = 0.15f;
-        private readonly float _downFadeDuration = 0.35f;
+        private readonly float _downFadeDuration = 0.5f;
         private readonly float _upDistance = 24f;
         private readonly Ease _inEase = Ease.OutCubic;
         private readonly Ease _upEase = Ease.OutQuad;
@@ -31,9 +31,52 @@ namespace NamPhuThuy.AnimateWithScripts
 
         [Header("Flags")]
         [SerializeField] private bool ignoreTimeScale = true;
+        [SerializeField] private ToastType toastType = ToastType.FLASH;
+        [SerializeField] private bool isChangeColor = false;
+        [SerializeField] private bool isCustomUpDistance = false;
+        [SerializeField] private float customUpDistance = 24f;
+        [SerializeField] private bool isCustomHoldDuration = false;
+        [SerializeField] private float customHoldDuration = 0.8f;
+
+        public ToastType ToastType
+        {
+            get => toastType;
+            set => toastType = value;
+        }
+
+        public bool IsChangeColor
+        {
+            get => isChangeColor;
+            set => isChangeColor = value;
+        }
+
+        public bool IsCustomUpDistance
+        {
+            get => isCustomUpDistance;
+            set => isCustomUpDistance = value;
+        }
+
+        public float CustomUpDistance
+        {
+            get => customUpDistance;
+            set => customUpDistance = value;
+        }
+
+        public bool IsCustomHoldDuration
+        {
+            get => isCustomHoldDuration;
+            set => isCustomHoldDuration = value;
+        }
+
+        public float CustomHoldDuration
+        {
+            get => customHoldDuration;
+            set => customHoldDuration = value;
+        }
 
         private Sequence _seq;
         private Vector2 _basePos;
+        private Color _defaultBackColor;
         private readonly string _fallbackText = "Readying!";
        
 
@@ -43,6 +86,7 @@ namespace NamPhuThuy.AnimateWithScripts
         {
             if (!_canvasGroup) _canvasGroup = GetComponent<CanvasGroup>();
             if (!_rectTransform) _rectTransform = GetComponent<RectTransform>();
+            if (backImage) _defaultBackColor = backImage.color;
             _basePos = _rectTransform.anchoredPosition;
             _canvasGroup.alpha = 0f;
             gameObject.SetActive(false);
@@ -135,7 +179,15 @@ namespace NamPhuThuy.AnimateWithScripts
             }
             
             SetContent(currentArgs.message);
-            SetRandomColor();
+            
+            if (isChangeColor || currentArgs.isChangeColor)
+            {
+                SetRandomColor();
+            }
+            else if (backImage != null)
+            {
+                backImage.color = _defaultBackColor;
+            }
 
             if (currentArgs.textColor != default) 
             {
@@ -159,7 +211,34 @@ namespace NamPhuThuy.AnimateWithScripts
         private void PlayAnim()
         {
             _seq?.Kill(false);
-           
+
+            float holdTime = currentArgs.isCustomHoldDuration
+                ? currentArgs.customHoldDuration
+                : (isCustomHoldDuration ? customHoldDuration : _holdDuration);
+
+            float upDist = currentArgs.isCustomUpDistance
+                ? currentArgs.customUpDistance
+                : (isCustomUpDistance ? customUpDistance : _upDistance);
+
+            ToastType activeType = currentArgs.toastType != ToastType.NONE ? currentArgs.toastType : toastType;
+
+            switch (activeType)
+            {
+                case ToastType.FLOAT:
+                    PlayFloatAnim(holdTime, upDist);
+                    break;
+                case ToastType.FLASH:
+                default:
+                    PlayFlashAnim(holdTime, upDist);
+                    break;
+            }
+
+            if (currentArgs.customDuration != 0f)
+                StartAutoReturn(currentArgs.customDuration);
+        }
+
+        private void PlayFlashAnim(float holdTime, float upDist)
+        {
             _rectTransform.localScale = Vector3.zero;
             _canvasGroup.alpha = 1f;
 
@@ -168,28 +247,42 @@ namespace NamPhuThuy.AnimateWithScripts
             _seq.Append(_rectTransform.DOScale(1.1f, 0.7f * _inDuration).SetEase(_inEase));
             _seq.Append(_rectTransform.DOScale(1f, 0.3f * _inDuration).SetEase(_inEase));
             
-            if (_holdDuration > 0f) _seq.AppendInterval(_holdDuration);
+            if (holdTime > 0f) _seq.AppendInterval(holdTime);
             
-            _seq.Append(_rectTransform.DOAnchorPosY(_rectTransform.anchoredPosition.y + _upDistance, _upDuration).SetEase(_upEase));
+            _seq.Append(_rectTransform.DOAnchorPosY(_rectTransform.anchoredPosition.y + upDist, _upDuration).SetEase(_upEase));
             _seq.Append(_rectTransform.DOScale(1.1f, 0.3f * _downFadeDuration).SetEase(_downEase));
             _seq.Join(_canvasGroup.DOFade(0f, 0.7f * _downFadeDuration));
             _seq.Append(_rectTransform.DOScale(0, 0.7f * _downFadeDuration).SetEase(_downEase));
-            _seq.OnComplete(() =>
+            _seq.OnComplete(OnAnimationComplete);
+        }
+
+        private void PlayFloatAnim(float holdTime, float upDist)
+        {
+            _rectTransform.localScale = Vector3.zero;
+            _canvasGroup.alpha = 0f;
+
+            float totalDuration = _inDuration + holdTime + _downFadeDuration;
+            _seq = DOTween.Sequence().SetUpdate(ignoreTimeScale);
+
+            _seq.Append(_rectTransform.DOAnchorPosY(_rectTransform.anchoredPosition.y + upDist, totalDuration).SetEase(_upEase));
+            _seq.Insert(0f, _canvasGroup.DOFade(1f, _inDuration).SetEase(_inEase));
+            _seq.Insert(0f, _rectTransform.DOScale(Vector3.one, _inDuration).SetEase(_inEase));
+            _seq.Insert(_inDuration + holdTime, _canvasGroup.DOFade(0f, _downFadeDuration).SetEase(_downEase));
+            _seq.OnComplete(OnAnimationComplete);
+        }
+
+        private void OnAnimationComplete()
+        {
+            ResetValues();
+            Recycle();
+            try
             {
-                ResetValues();
-                Recycle();
-                try
-                {
-                    currentArgs.OnComplete?.Invoke();
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogError($"Error in OnComplete callback: {ex.Message}\n{ex.StackTrace}");
-                }
-            });
-            
-            if (currentArgs.customDuration != 0f)
-                StartAutoReturn(currentArgs.customDuration);
+                currentArgs.OnComplete?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Error in OnComplete callback: {ex.Message}\n{ex.StackTrace}");
+            }
         }
         
         #region Set Up

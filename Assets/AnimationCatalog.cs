@@ -1,5 +1,5 @@
 /*
-Github: https://github.com/NamPhuThuy
+Github: https://github.com/NamPhuThuy/UP-AnimateWithScripts
 */
 
 
@@ -16,8 +16,6 @@ namespace NamPhuThuy.AnimateWithScripts
         ITEM_FLY = 2,
         STAT_CHANGE_TEXT = 3,
         SCREEN_SHAKE = 4,
-        CONFETTI = 7,
-        BREAK_TILE_PARTICLE = 5,
         PARTICLE_SYSTEM = 6,
         SPRITE_MOTION = 8,
         SPINE_CONTROL = 9,
@@ -124,6 +122,13 @@ namespace NamPhuThuy.AnimateWithScripts
             return e != null ? Mathf.Max(0f, e.softMaxAliveSeconds) : Mathf.Max(0f, fallback);
         }
 
+        /// <summary>Get max limit count (fallback if missing or 0).</summary>
+        public int GetLimit(AnimationType type, int fallback = 5)
+        {
+            var e = GetEntry(type);
+            return (e != null && e.limit > 0) ? e.limit : Mathf.Max(1, fallback);
+        }
+
         #endregion
         
         [Serializable]
@@ -132,6 +137,7 @@ namespace NamPhuThuy.AnimateWithScripts
             public AnimationType type;
             public AnimationBase prefab; 
             [Min(0)] public int preload = 3;
+            [Min(1)] public int limit = 5;
             public float softMaxAliveSeconds = 10f; // safety auto-release
         }
         

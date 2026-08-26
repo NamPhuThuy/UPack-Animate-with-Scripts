@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 18}
-  m_SizeDelta: {x: 527.3463, y: 142.5107}
+  m_AnchoredPosition: {x: 0, y: -1}
+  m_SizeDelta: {x: 929.4618, y: 142.5107}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4341484013653853779
 CanvasRenderer:
@@ -65,10 +65,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Warning
+  m_text: You have empty slots in deck
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: dc6d4008eb615b241923fd0789deed0c, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 0d6e31ca07a14fa448a4720049d993d7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -92,7 +92,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 80
+  m_fontSize: 70.2
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -173,7 +173,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 832}
+  m_AnchoredPosition: {x: 0, y: 231}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &6683221631010279429
@@ -202,17 +202,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlaying: 0
   currentArgs:
-    Message: 
-    TextColor: {r: 0, g: 0, b: 0, a: 0}
-    TextFont: {fileID: 0}
+    message: 
+    textColor: {r: 0, g: 0, b: 0, a: 0}
+    textFont: {fileID: 0}
     customDuration: 0
-    CustomAnchoredPos: {x: 0, y: 0, z: 0}
-    CustomParent: {fileID: 0}
-    CustomScale: 0
+    customAnchoredPos: {x: 0, y: 0, z: 0}
+    customParent: {fileID: 0}
+    customScale: 0
     customEnableBackImage: 0
+    isChangeColor: 0
+    isCustomUpDistance: 0
+    customUpDistance: 0
+    useScreenPercentage: 0
+    screenPercentage: {x: 0, y: 0}
   messageText: {fileID: 9173678522159357702}
   backImage: {fileID: 6714918850751644749}
   ignoreTimeScale: 1
+  isChangeColor: 0
+  isCustomUpDistance: 0
+  customUpDistance: 24
 --- !u!1 &7346708429932132327
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,7 +256,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1377.4851, y: 353.1105}
+  m_SizeDelta: {x: 975.9727, y: 140.51}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7591298327793348760
 CanvasRenderer:
@@ -271,14 +279,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.92941177, b: 0.7764706, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.56078434}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b3ab5c6c4f136ae41996a91cde420c3b, type: 3}
+  m_Sprite: {fileID: -4337122490490606097, guid: 878d369a600110d4cb851bb0ac86e105, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

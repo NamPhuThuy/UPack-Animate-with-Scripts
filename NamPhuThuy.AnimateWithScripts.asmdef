@@ -4,9 +4,7 @@
     "references": [
         "UnityEngine.UI",
         "Unity.TextMeshPro",
-        "NamPhuThuy.AnimateWithScripts.DOTween",
-        "NamPhuThuy.AnimateWithScripts.PrimeTween",
-        "NamPhuThuy.AnimateWithScripts.PrimeTween.Runtime"
+        "DOTween.Modules"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -17,4 +15,4 @@
     "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false
-}
+}
